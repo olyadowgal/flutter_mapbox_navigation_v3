@@ -1,3 +1,84 @@
-include: package:very_good_analysis/analysis_options.yaml
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+# This file configures the analyzer, which statically analyzes Dart code to
+# check for errors, warnings, and lints.
+#
+# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
+# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
+# invoked from the command line by running `flutter analyze`.
+
+# The following line activates a set of recommended lints for Flutter apps,
+# packages, and plugins designed to encourage good coding practices.
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  # The lint rules applied to this project can be customized in the
+  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
+  # included above or to enable additional rules. A list of all available lints
+  # and their documentation is published at https://dart.dev/lints.
+  #
+  # Instead of disabling a lint rule for the entire project in the
+  # section below, it can also be suppressed for a single line of code
+  # or a specific dart file by using the `// ignore: name_of_lint` and
+  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
+  # producing the lint.
+  rules:
+    always_declare_return_types: true
+    avoid_bool_literals_in_conditional_expressions: true
+    avoid_catching_errors: true
+    avoid_double_and_int_checks: true
+    avoid_dynamic_calls: true
+    avoid_escaping_inner_quotes: true
+    avoid_function_literals_in_foreach_calls: false
+    avoid_implementing_value_types: true
+    avoid_private_typedef_functions: true
+    avoid_returning_this: true
+    avoid_setters_without_getters: true
+    avoid_slow_async_io: true
+    avoid_type_to_string: true
+    avoid_unused_constructor_parameters: true
+    cancel_subscriptions: true
+    close_sinks: true
+    combinators_ordering: true
+    conditional_uri_does_not_exist: true
+    depend_on_referenced_packages: false
+    deprecated_consistency: true
+    directives_ordering: true
+    join_return_with_assignment: true
+    library_private_types_in_public_api: false
+    literal_only_boolean_expressions: true
+    missing_whitespace_between_adjacent_strings: true
+    no_runtimeType_toString: true
+    noop_primitive_operations: true
+    only_throw_errors: true
+    prefer_constructors_over_static_methods: true
+    prefer_expression_function_bodies: true
+    prefer_final_in_for_each: true
+    prefer_final_locals: true
+    prefer_single_quotes: true
+    prefer_foreach: true
+    prefer_mixin: true
+    prefer_null_aware_method_calls: true
+    require_trailing_commas: true
+    sized_box_shrink_expand: true
+    sort_pub_dependencies: true
+    sort_unnamed_constructors_first: true
+    test_types_in_equals: true
+    throw_in_finally: true
+    tighten_type_of_initializing_formals: true
+    type_annotate_public_apis: true
+    unnecessary_await_in_return: true
+    unnecessary_lambdas: true
+    unnecessary_null_checks: true
+    unnecessary_parenthesis: true
+    unnecessary_statements: true
+    unnecessary_to_list_in_spreads: true
+    use_decorated_box: true
+    use_enums: true
+    use_is_even_rather_than_modulo: true
+    use_named_constants: true
+    use_raw_strings: true
+    use_super_parameters: true
+
+analyzer:
+  exclude: [ build/**, lib/**.g.dart, integration_test/**.g.dart ]
+  language:
+    strict-raw-types: true
