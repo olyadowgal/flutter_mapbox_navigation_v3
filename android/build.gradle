@@ -2,7 +2,7 @@ group 'com.eopeter.fluttermapboxnavigation'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '2.1.0'
     ext.android_gradle_version = '7.4.2'
     repositories {
         google()
