@@ -32,7 +32,8 @@ class EmbeddedNavigationViewFactory(
 
         view.initialize()
 
-        activity.setTheme(R.style.Theme_AppCompat_NoActionBar)
+        activity.setTheme(R.style.Theme_AppCompat_DayNight_NoActionBar)
+
 
         return view
     }
