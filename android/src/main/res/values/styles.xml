@@ -9,6 +9,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="Theme.AppCompat.DayNight.NoActionBar" parent="Theme.AppCompat.DayNight">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+
     <style name="MapboxCustomTripProgressStyle" parent="MapboxStyleTripProgressView">
         <item name="tripProgressTextColor">#7B3CEA</item>
         <item name="tripProgressViewBackgroundColor">#EEEEEE</item>

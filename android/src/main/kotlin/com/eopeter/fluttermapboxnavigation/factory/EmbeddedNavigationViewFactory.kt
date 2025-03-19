@@ -34,7 +34,6 @@ class EmbeddedNavigationViewFactory(
 
         activity.setTheme(R.style.Theme_AppCompat_DayNight_NoActionBar)
 
-
         return view
     }
 }
