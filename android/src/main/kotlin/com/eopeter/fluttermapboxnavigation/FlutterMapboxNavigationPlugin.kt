@@ -10,6 +10,7 @@ import com.eopeter.fluttermapboxnavigation.factory.EmbeddedNavigationViewFactory
 import com.eopeter.fluttermapboxnavigation.models.Waypoint
 import com.mapbox.api.directions.v5.DirectionsCriteria
 import com.mapbox.api.directions.v5.models.DirectionsRoute
+import com.mapbox.maps.plugin.annotation.generated.CircleAnnotationOptions
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -83,32 +84,46 @@ class FlutterMapboxNavigationPlugin : FlutterPlugin, MethodCallHandler,
             "getPlatformVersion" -> {
                 result.success("Android ${Build.VERSION.RELEASE}")
             }
+
             "getDistanceRemaining" -> {
                 result.success(distanceRemaining)
             }
+
             "getDurationRemaining" -> {
                 result.success(durationRemaining)
             }
+
             "startFreeDrive" -> {
                 enableFreeDriveMode = true
                 checkPermissionAndBeginNavigation(call)
             }
+
             "startNavigation" -> {
                 enableFreeDriveMode = false
                 checkPermissionAndBeginNavigation(call)
             }
+
             "addWayPoints" -> {
                 addWayPointsToNavigation(call, result)
             }
+            //This is custom code for StreetIQ
+            //addCustomMarker s a custom StreetIq method to show markers on a map
+            "addCustomMarker" -> {
+                addCustomMarker(call, result)
+            }
+
             "finishNavigation" -> {
                 NavigationLauncher.stopNavigation(currentActivity)
             }
+
             "enableOfflineRouting" -> {
                 downloadRegionForOfflineRouting(call, result)
             }
+
             else -> result.notImplemented()
         }
     }
+
 
     private fun downloadRegionForOfflineRouting(
         call: MethodCall,
@@ -308,6 +323,40 @@ class FlutterMapboxNavigationPlugin : FlutterPlugin, MethodCallHandler,
         }
         // super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
+
+    //This is custom code for StreetIQ
+    private fun addCustomMarker(call: MethodCall, result: Result) {
+        val arguments = call.arguments as? List<Map<String, Any?>>
+
+        if (arguments.isNullOrEmpty()) {
+            result.error("INVALID_ARGUMENTS", "Markers list must not be null or empty", null)
+            return
+        }
+
+        // Convert the list of maps into a List<Waypoint>
+        val waypoints = arguments.mapNotNull { marker ->
+            val latitude = marker["latitude"] as? Double
+            val longitude = marker["longitude"] as? Double
+            val title = marker["title"] as? String ?: ""
+
+            if (latitude != null && longitude != null) {
+                Waypoint(title, longitude, latitude, false) // Create Waypoint
+            } else {
+                null // Skip invalid data
+            }
+        }
+
+        if (waypoints.isEmpty()) {
+            result.error("INVALID_ARGUMENTS", "No valid waypoints found", null)
+            return
+        }
+
+        // Add all waypoints instead of a single one
+        NavigationLauncher.addAnnotations(currentActivity, waypoints)
+        result.success("Markers added successfully")
+    }
+
+
 }
 
 private const val MAPBOX_ACCESS_TOKEN_PLACEHOLDER = "YOUR_MAPBOX_ACCESS_TOKEN_GOES_HERE"

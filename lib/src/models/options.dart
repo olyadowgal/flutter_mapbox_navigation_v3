@@ -10,7 +10,6 @@ import 'package:flutter_mapbox_navigation/src/models/voice_units.dart';
 /// 'do not change this configuration option'.
 ///
 class MapBoxOptions {
-
   MapBoxOptions({
     this.initialLatitude,
     this.initialLongitude,

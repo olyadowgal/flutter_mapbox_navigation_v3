@@ -5,10 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import androidx.annotation.RequiresApi
 
 import org.json.JSONObject
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.eopeter.fluttermapboxnavigation.FlutterMapboxNavigationPlugin
 import com.eopeter.fluttermapboxnavigation.R
 import com.eopeter.fluttermapboxnavigation.databinding.NavigationActivityBinding
@@ -25,6 +29,9 @@ import com.mapbox.api.directions.v5.models.RouteOptions
 import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
+import com.mapbox.maps.plugin.annotation.annotations
+import com.mapbox.maps.plugin.annotation.generated.CircleAnnotationOptions
+import com.mapbox.maps.plugin.annotation.generated.createCircleAnnotationManager
 import com.mapbox.maps.plugin.gestures.OnMapLongClickListener
 import com.mapbox.maps.plugin.gestures.OnMapClickListener
 import com.mapbox.maps.plugin.gestures.gestures
@@ -59,6 +66,9 @@ class NavigationActivity : AppCompatActivity() {
     private var accessToken: String? = null
     private var lastLocation: Location? = null
     private var isNavigationInProgress = false
+    //This is custom code for StreetIQ
+    private var addAnnotationBroadcastReceiver: BroadcastReceiver? = null
+    var mapView: MapView? = null
 
     private val navigationStateListener = object : NavigationViewListener() {
         override fun onFreeDrive() {
@@ -82,9 +92,10 @@ class NavigationActivity : AppCompatActivity() {
         }
     }
 
+    //region Activity Lifecycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.Theme_AppCompat_DayNight_NoActionBar)
+        setTheme(R.style.Theme_AppCompat_NoActionBar)
         binding = NavigationActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.navigationView.addListener(navigationStateListener)
@@ -99,6 +110,8 @@ class NavigationActivity : AppCompatActivity() {
         MapboxNavigationApp
             .setup(navigationOptions)
             .attach(this)
+        //this is custom code for StreetIQ
+        binding.navigationView.registerMapObserver(onMapAttached)
 
         if (FlutterMapboxNavigationPlugin.longPressDestinationEnabled) {
             binding.navigationView.registerMapObserver(onMapLongClick)
@@ -117,13 +130,16 @@ class NavigationActivity : AppCompatActivity() {
                 CustomInfoPanelEndNavButtonBinder(act)
         }
 
-        MapboxNavigationApp.current()?.registerBannerInstructionsObserver(this.bannerInstructionObserver)
-        MapboxNavigationApp.current()?.registerVoiceInstructionsObserver(this.voiceInstructionObserver)
+        MapboxNavigationApp.current()
+            ?.registerBannerInstructionsObserver(this.bannerInstructionObserver)
+        MapboxNavigationApp.current()
+            ?.registerVoiceInstructionsObserver(this.voiceInstructionObserver)
         MapboxNavigationApp.current()?.registerOffRouteObserver(this.offRouteObserver)
         MapboxNavigationApp.current()?.registerRoutesObserver(this.routesObserver)
         MapboxNavigationApp.current()?.registerLocationObserver(locationObserver)
         MapboxNavigationApp.current()?.registerRouteProgressObserver(routeProgressObserver)
         MapboxNavigationApp.current()?.registerArrivalObserver(arrivalObserver)
+
 
         finishBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
@@ -146,6 +162,53 @@ class NavigationActivity : AppCompatActivity() {
             }
         }
 
+        //This is custom code for StreetIQ
+        addAnnotationBroadcastReceiver = object : BroadcastReceiver() {
+            @RequiresApi(Build.VERSION_CODES.N)
+            override fun onReceive(context: Context, intent: Intent) {
+                Log.d("Embedded", "Recieved broadcast in NavigationActivity")
+                // Retrieve the waypoint annotation
+                val annotations = intent.getSerializableExtra("annotations") as? List<Waypoint>
+                if (annotations != null) {
+                    Log.d("Embedded", "Markers are recieved in NavigationActivity: $annotations")
+                    annotations.forEach { annotation ->
+                    // Get the geographic coordinates from the waypoint
+                    val longitude = annotation.point.longitude()
+                    val latitude = annotation.point.latitude()
+
+                    // Check if mapView is initialized and add annotations
+                    if (mapView != null) {
+                        Log.d("Embedded", "Mapview is not null")
+                            val annotationApi = mapView!!.annotations
+                            val circleAnnotationManager =
+                                annotationApi.createCircleAnnotationManager()
+
+                            // Create and configure circle annotation options
+                            val circleAnnotationOptions = CircleAnnotationOptions()
+                                .withPoint(
+                                    Point.fromLngLat(
+                                        longitude,
+                                        latitude
+                                    )
+                                ) // Waypoint's location
+                                .withCircleRadius(8.0) // Circle size
+                                .withCircleColor("#ee4e8b") // Circle color
+                                .withCircleStrokeWidth(2.0) // Border thickness
+                                .withCircleStrokeColor("#ffffff") // Border color
+
+                            // Add the circle annotation to the map
+                            circleAnnotationManager.create(circleAnnotationOptions)
+                        }
+                    }
+                } else {
+                    // Log an error if the annotation is null
+                    println("Error: Annotation is null")
+                }
+            }
+        }
+
+
+
         registerReceiver(
             finishBroadcastReceiver,
             IntentFilter(NavigationLauncher.KEY_STOP_NAVIGATION)
@@ -155,6 +218,18 @@ class NavigationActivity : AppCompatActivity() {
             addWayPointsBroadcastReceiver,
             IntentFilter(NavigationLauncher.KEY_ADD_WAYPOINTS)
         )
+        // Use ContextCompat.registerReceiver for Android 13+ compatibility
+        ContextCompat.registerReceiver(
+            this,
+            addAnnotationBroadcastReceiver,
+            IntentFilter(NavigationLauncher.KEY_ADD_ANNOTATION),
+            ContextCompat.RECEIVER_NOT_EXPORTED // Ensures security
+        )
+        Log.d("Embedded", "Broadcast receivers are registered in NavigationActivity")
+//        registerReceiver(
+//            addAnnotationBroadcastReceiver,
+//            IntentFilter(NavigationLauncher.KEY_ADD_ANNOTATION)
+//        )
 
         // TODO set the style Uri
         var styleUrlDay = FlutterMapboxNavigationPlugin.mapStyleUrlDay
@@ -194,8 +269,10 @@ class NavigationActivity : AppCompatActivity() {
         }
         binding.navigationView.removeListener(navigationStateListener)
 
-        MapboxNavigationApp.current()?.unregisterBannerInstructionsObserver(this.bannerInstructionObserver)
-        MapboxNavigationApp.current()?.unregisterVoiceInstructionsObserver(this.voiceInstructionObserver)
+        MapboxNavigationApp.current()
+            ?.unregisterBannerInstructionsObserver(this.bannerInstructionObserver)
+        MapboxNavigationApp.current()
+            ?.unregisterVoiceInstructionsObserver(this.voiceInstructionObserver)
         MapboxNavigationApp.current()?.unregisterOffRouteObserver(this.offRouteObserver)
         MapboxNavigationApp.current()?.unregisterRoutesObserver(this.routesObserver)
         MapboxNavigationApp.current()?.unregisterLocationObserver(locationObserver)
@@ -203,6 +280,7 @@ class NavigationActivity : AppCompatActivity() {
         MapboxNavigationApp.current()?.unregisterArrivalObserver(arrivalObserver)
     }
 
+    //endregion
     fun tryCancelNavigation() {
         if (isNavigationInProgress) {
             isNavigationInProgress = false
@@ -410,6 +488,13 @@ class NavigationActivity : AppCompatActivity() {
     private val routesObserver = RoutesObserver { routeUpdateResult ->
         if (routeUpdateResult.navigationRoutes.isNotEmpty()) {
             sendEvent(MapBoxEvents.REROUTE_ALONG);
+        }
+    }
+
+    //This is custom code for StreetIQ
+    private val onMapAttached = object : MapViewObserver() {
+        override fun onAttached(mapView: MapView) {
+            this@NavigationActivity.mapView = mapView
         }
     }
 

@@ -17,7 +17,7 @@ class RouteEvent {
       eventType = MapBoxEvent.values
           .firstWhere((e) => e.toString().split('.').last == json['eventType']);
     } catch (e) {
-      // TODO handle the error
+      // TODOhandle the error
     }
 
     final dataJson = json['data'];

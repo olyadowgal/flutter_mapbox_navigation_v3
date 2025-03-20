@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_mapbox_navigation/src/models/models.dart';
 
 /// Controller for a single MapBox Navigation instance
@@ -25,7 +25,6 @@ class MapBoxNavigationViewController {
   late EventChannel _eventChannel;
 
   ValueSetter<RouteEvent>? _routeEventNotifier;
-
   late StreamSubscription<RouteEvent> _routeEventSubscription;
 
   ///Current Device OS Version
@@ -83,7 +82,7 @@ class MapBoxNavigationViewController {
     }
 
     var i = 0;
-    final wayPointMap = {for (var e in pointList) i++: e};
+    final wayPointMap = {for (final e in pointList) i++: e};
 
     var args = <String, dynamic>{};
     if (options != null) args = options.toMap();
@@ -95,6 +94,68 @@ class MapBoxNavigationViewController {
         .then((dynamic result) => result as bool);
   }
 
+  /// Adds custom markers to the map based on a list of LocationPhoto objects.
+  ///
+  /// [photos] is the list of LocationPhoto instances representing markers.
+  //This is custom code for StreetIQ
+  Future<void> addCustomMarkers({
+    required List<Map<String, dynamic>> photos,
+  }) async {
+    try {
+      // Wrap the list of photos in a Map to match the expected iOS structure
+      final arguments = <String, dynamic>{
+        'markers': photos,
+      };
+
+      await _methodChannel.invokeMethod('addCustomMarkers', arguments);
+    } on PlatformException catch (e) {
+      if (kDebugMode) {
+        print('Error adding custom markers: ${e.message}');
+      }
+    }
+  }
+
+  //This is custom code for StreetIQ
+  /// Adds custom markers to the map based on a list of LocationPhoto objects.
+  /// [polylinePoints] is the list of locations representing the polyline.
+  Future<void> addCustomPolyline({
+    required List<Map<String, dynamic>> polylinePoints,
+  }) async {
+    try {
+      // Wrap the list of photos in a Map to match the expected iOS structure
+      final arguments = <String, dynamic>{
+        'points': polylinePoints,
+      };
+
+      await _methodChannel.invokeMethod('addCustomPolyline', arguments);
+    } on PlatformException catch (e) {
+      if (kDebugMode) {
+        print('Error adding custom markers: ${e.message}');
+      }
+    }
+  }
+
+  // This is custom code for StreetIQ
+  /// Centers the map around a specific point.
+  /// [latitude] and [longitude] are the coordinates of the point.
+  Future<void> addCenterPoint({
+    required double latitude,
+    required double longitude,
+  }) async {
+    try {
+      final arguments = <String, dynamic>{
+        'latitude': latitude,
+        'longitude': longitude,
+      };
+
+      await _methodChannel.invokeMethod('addCenterPoint', arguments);
+    } on PlatformException catch (e) {
+      if (kDebugMode) {
+        print('Error centering map: ${e.message}');
+      }
+    }
+  }
+
   /// starts listening for events
   Future<void> initialize() async {
     _routeEventSubscription = _streamRouteEvent!.listen(_onProgressData);
@@ -102,7 +163,7 @@ class MapBoxNavigationViewController {
 
   /// Clear the built route and resets the map
   Future<bool?> clearRoute() async {
-    return _methodChannel.invokeMethod('clearRoute', null);
+    return _methodChannel.invokeMethod('clearRoute');
   }
 
   /// Starts Free Drive Mode
@@ -122,7 +183,7 @@ class MapBoxNavigationViewController {
 
   ///Ends Navigation and Closes the Navigation View
   Future<bool?> finishNavigation() async {
-    final success = await _methodChannel.invokeMethod('finishNavigation', null);
+    final success = await _methodChannel.invokeMethod('finishNavigation');
     return success as bool?;
   }
 

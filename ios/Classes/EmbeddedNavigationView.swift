@@ -84,6 +84,11 @@ public class FlutterMapboxNavigationView : NavigationFactory, FlutterPlatformVie
                 //used to recenter map from user action during navigation
                 strongSelf.navigationMapView.navigationCamera.follow()
             }
+            //This is custom code for StreetIQ
+            else if(call.method == "addCustomMarkers") {
+                print("Received arguments: \(String(describing: arguments))")
+                strongSelf.addCustomMarker(arguments: arguments, result: result)
+            }
             else
             {
                 result("method is not implemented");
@@ -269,6 +274,46 @@ public class FlutterMapboxNavigationView : NavigationFactory, FlutterPlatformVie
         navigationMapView.navigationCamera.viewportDataSource = navigationViewportDataSource
         result(true)
     }
+    
+    ///This is custom code for StreetIQ
+    func addCustomMarker(arguments: NSDictionary?, result: @escaping FlutterResult) {
+        // Extract 'markers' from the arguments
+        guard let markersArray = arguments?["markers"] as? [[String: Any]] else {
+            result(FlutterError(code: "INVALID_ARGUMENTS", message: "Invalid markers data", details: nil))
+            return
+        }
+
+        guard let mapView = navigationMapView?.mapView else {
+            result(FlutterError(code: "MAP_VIEW_NULL", message: "MapView is not initialized", details: nil))
+            return
+        }
+
+        let annotationManager = mapView.annotations.makeCircleAnnotationManager()
+
+        var circleAnnotations: [CircleAnnotation] = []
+
+        for marker in markersArray {
+            guard let latitude = marker["latitude"] as? Double,
+                  let longitude = marker["longitude"] as? Double else { continue }
+
+            let coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+
+            // Create a circle annotation with only required properties
+            var circleAnnotation = CircleAnnotation(centerCoordinate: coordinate)
+
+            // Set additional properties
+            circleAnnotation.circleRadius = 4.0
+            circleAnnotation.circleColor = StyleColor(UIColor(red: 144.0/255.0, green: 197.0/255.0, blue: 252.0/255.0, alpha: 1.0))
+            circleAnnotation.circleStrokeWidth = 2.0
+            circleAnnotation.circleStrokeColor = StyleColor(UIColor(red: 198.0/255.0, green: 221.0/255.0, blue: 245.0/255.0, alpha: 1.0))
+            circleAnnotations.append(circleAnnotation)
+        }
+
+        annotationManager.annotations = circleAnnotations
+        result(nil) // Indicate success
+    }
+
+
 
     func startEmbeddedNavigation(arguments: NSDictionary?, result: @escaping FlutterResult) {
         guard let response = self.routeResponse else { return }

@@ -8,6 +8,7 @@ import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.LifecycleOwner
+import com.eopeter.fluttermapboxnavigation.activity.NavigationLauncher
 import com.eopeter.fluttermapboxnavigation.databinding.NavigationActivityBinding
 import com.eopeter.fluttermapboxnavigation.models.MapBoxEvents
 import com.eopeter.fluttermapboxnavigation.models.MapBoxRouteProgressEvent
@@ -96,9 +97,18 @@ open class TurnByTurn(
             "getDurationRemaining" -> {
                 result.success(this.durationRemaining)
             }
+            //This is custom code for StreetIQ
+            "addCustomMarkers" -> {
+                Log.d("Embedded", "addCustomMarkers not implemented")
+            }
+            //This is custom code for StreetIQ
+            "addCustomPolyline" -> {
+                Log.d("Embedded", "addCustomPolyline not implemented")
+            }
             else -> result.notImplemented()
         }
     }
+
 
     private fun buildRoute(methodCall: MethodCall, result: MethodChannel.Result) {
         this.isNavigationCanceled = false

@@ -9,12 +9,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="Theme.AppCompat.DayNight.NoActionBar" parent="Theme.AppCompat.DayNight">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-
     <style name="MapboxCustomTripProgressStyle" parent="MapboxStyleTripProgressView">
         <item name="tripProgressTextColor">#7B3CEA</item>
         <item name="tripProgressViewBackgroundColor">#EEEEEE</item>
@@ -32,4 +26,10 @@
         <item name="maneuverViewIconStyle">@style/MapboxCustomManeuverTurnIconStyle</item>
         <item name="laneGuidanceManeuverIconStyle">@style/MapboxCustomManeuverTurnIconStyle</item>
     </style>
+
+    <style name="Theme.AppCompat.NoActionBar" parent="Theme.AppCompat">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    
 </resources>
