@@ -25,7 +25,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:$android_gradle_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.mapbox.gradle.plugins:access-token:0.4.0"
+//        classpath "com.mapbox.gradle.plugins:access-token:0.4.0"
     }
 }
 
@@ -89,8 +89,10 @@ android {
 
 dependencies {
     // Mapbox Navigation SDK
-    implementation "com.mapbox.navigation:copilot:2.20.2"
-    implementation "com.mapbox.navigation:ui-app:2.20.2"
+    implementation "com.mapbox.navigationcore:copilot:3.7.0"
+    implementation "com.mapbox.navigationcore:navigation:3.7.0"
+    implementation "com.mapbox.navigationcore:ui-maps:3.7.0"
+    //this is the drop-in UI library is deprecated, should be replaced with the new one
     implementation "com.mapbox.navigation:ui-dropin:2.20.2"
 
 
