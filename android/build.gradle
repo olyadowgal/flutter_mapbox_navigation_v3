@@ -89,9 +89,10 @@ android {
 
 dependencies {
     // Mapbox Navigation SDK
-    implementation "com.mapbox.navigationcore:copilot:3.7.0"
-    implementation "com.mapbox.navigationcore:navigation:3.7.0"
-    implementation "com.mapbox.navigationcore:ui-maps:3.7.0"
+    implementation "com.mapbox.navigationcore:android:3.7.2"
+//    implementation "com.mapbox.navigationcore:navigation:3.7.0"
+//    implementation "com.mapbox.navigationcore:copilot:3.7.0"
+//    implementation "com.mapbox.navigationcore:ui-maps:3.7.0"
     //this is the drop-in UI library is deprecated, should be replaced with the new one
     implementation "com.mapbox.navigation:ui-dropin:2.20.2"
 
