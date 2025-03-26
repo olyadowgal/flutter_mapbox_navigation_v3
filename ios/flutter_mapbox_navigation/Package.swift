@@ -1,4 +1,6 @@
 // swift-tools-version: 6.0
+// The swift-tools-version declares the minimum version of Swift required to build this package.
+
 import PackageDescription
 
 let package = Package(
@@ -20,7 +22,8 @@ let package = Package(
                 .product(name: "MapboxNavigationUIKit", package: "mapbox-navigation-ios")
             ],
             resources: [
-                // Add resources if needed
+                .process("PrivacyInfo.xcprivacy"),
+
             ]
         )
     ]
