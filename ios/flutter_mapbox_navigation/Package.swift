@@ -19,7 +19,7 @@ let package = Package(
                 .product(name: "MapboxNavigationCore", package: "mapbox-navigation-ios"),
                 .product(name: "MapboxNavigationUIKit", package: "mapbox-navigation-ios")
             ],
-            path: "Classes",
+            path: "ios/flutter_mapbox_navigation/Classes",
             resources: [
                 // Add resources if needed
             ]
