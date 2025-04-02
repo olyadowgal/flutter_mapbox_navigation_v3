@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import MapboxNavigation
+//import MapboxNavigation
 import MapboxNavigationCore
 import MapboxMaps
 

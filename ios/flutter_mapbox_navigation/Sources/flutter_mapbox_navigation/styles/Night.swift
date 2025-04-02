@@ -1,7 +1,7 @@
 import MapboxMaps
 import MapboxDirections
-import MapboxCoreNavigation
-import MapboxNavigation
+import MapboxNavigationCore
+//import MapboxNavigation
 
 class CustomNightStyle: NightStyle {
 

@@ -3,7 +3,7 @@ import UIKit
 import MapboxMaps
 import MapboxDirections
 import MapboxNavigationCore
-import MapboxNavigation
+//import MapboxNavigation
 
 public class FlutterMapboxNavigationPlugin: NavigationFactory, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {

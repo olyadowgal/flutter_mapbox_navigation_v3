@@ -1,5 +1,6 @@
 import MapboxMaps
-import MapboxNavigation
+import MapboxNavigationCore
+//import MapboxNavigation
 import MapboxMaps
 
 class CustomDayStyle: DayStyle {
