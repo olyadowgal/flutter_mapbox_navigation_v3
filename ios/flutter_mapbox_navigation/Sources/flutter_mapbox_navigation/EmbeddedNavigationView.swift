@@ -2,7 +2,7 @@ import Flutter
 import UIKit
 import MapboxMaps
 import MapboxDirections
-import MapboxCoreNavigation
+import MapboxNavigationCore
 import MapboxNavigation
 
 public class FlutterMapboxNavigationView : NavigationFactory, FlutterPlatformView

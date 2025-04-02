@@ -7,7 +7,7 @@
 
 import UIKit
 import MapboxNavigation
-import MapboxCoreNavigation
+import MapboxNavigationCore
 import MapboxMaps
 
 public class FreeDriveViewController : UIViewController {
