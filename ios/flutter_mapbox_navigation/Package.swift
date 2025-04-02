@@ -23,7 +23,6 @@ let package = Package(
             ],
             resources: [
                 .process("PrivacyInfo.xcprivacy"),
-
             ]
         )
     ]
