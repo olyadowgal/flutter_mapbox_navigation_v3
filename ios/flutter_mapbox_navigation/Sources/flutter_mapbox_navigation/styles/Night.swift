@@ -1,9 +1,9 @@
 import MapboxMaps
 import MapboxDirections
 import MapboxNavigationCore
-//import MapboxNavigation
+import MapboxNavigationUIKit
 
-class CustomNightStyle: NightStyle {
+class CustomNightStyle: StandardNightStyle {
 
     required init() {
         super.init()
@@ -26,7 +26,7 @@ class CustomNightStyle: NightStyle {
         mapStyleURL = URL(string: StyleURI.navigationNight.rawValue)!
         previewMapStyleURL = mapStyleURL
 
-        // Specify that the style should be used during the day.
+        // Specify that the style should be used during the night.
         styleType = .night
     }
 

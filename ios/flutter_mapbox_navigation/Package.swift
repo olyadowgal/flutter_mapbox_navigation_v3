@@ -13,6 +13,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/mapbox/mapbox-navigation-ios.git", from: "3.7.0")
+        .package(url: "https://github.com/mapbox/mapbox-maps-ios.git", from: "11.0.0")
     ],
     targets: [
         .target(
@@ -20,6 +21,7 @@ let package = Package(
             dependencies: [
                 .product(name: "MapboxNavigationCore", package: "mapbox-navigation-ios"),
                 .product(name: "MapboxNavigationUIKit", package: "mapbox-navigation-ios")
+                .product(name: "MapboxMaps", package: "mapbox-maps-ios")
             ],
             resources: [
                 .process("PrivacyInfo.xcprivacy"),
