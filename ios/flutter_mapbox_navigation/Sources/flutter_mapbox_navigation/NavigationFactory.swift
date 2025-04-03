@@ -2,8 +2,8 @@ import Flutter
 import UIKit
 import MapboxMaps
 import MapboxDirections
-import MapboxCoreNavigation
-import MapboxNavigation
+import MapboxNavigationCore
+//import MapboxNavigation
 
 public class NavigationFactory : NSObject, FlutterStreamHandler
 {

@@ -9,6 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
+ios/flutter_mapbox_navigation/.index-build
 
 # IntelliJ related
 *.iml
