@@ -326,42 +326,6 @@ public class NavigationFactory : NSObject, FlutterStreamHandler
     
     func downloadOfflineRoute(arguments: NSDictionary?, flutterResult: @escaping FlutterResult)
     {
-        /*
-         // Create a directions client and store it as a property on the view controller.
-         self.navigationDirections = NavigationDirections(credentials: Directions.shared.credentials)
-         
-         // Fetch available routing tile versions.
-         _ = self.navigationDirections!.fetchAvailableOfflineVersions { (versions, error) in
-         guard let version = versions?.first else { return }
-         
-         let coordinateBounds = CoordinateBounds(southWest: CLLocationCoordinate2DMake(0, 0), northEast: CLLocationCoordinate2DMake(1, 1))
-         
-         // Download tiles using the most recent version.
-         _ = self.navigationDirections!.downloadTiles(in: coordinateBounds, version: version) { (url, response, error) in
-         guard let url = url else {
-         flutterResult(false)
-         preconditionFailure("Unable to locate temporary file.")
-         }
-         
-         guard let outputDirectoryURL = Bundle.mapboxCoreNavigation.suggestedTileURL(version: version) else {
-         flutterResult(false)
-         preconditionFailure("No suggested tile URL.")
-         }
-         try? FileManager.default.createDirectory(at: outputDirectoryURL, withIntermediateDirectories: true, attributes: nil)
-         
-         // Unpack downloaded routing tiles.
-         NavigationDirections.unpackTilePack(at: url, outputDirectoryURL: outputDirectoryURL, progressHandler: { (totalBytes, bytesRemaining) in
-         // Show unpacking progress.
-         }, completionHandler: { (result, error) in
-         // Configure the offline router with the output directory where the tiles have been unpacked.
-         self.navigationDirections!.configureRouter(tilesURL: outputDirectoryURL) { (numberOfTiles) in
-         // Completed, dismiss UI
-         flutterResult(true)
-         }
-         })
-         }
-         }
-         */
     }
     
     func encodeRouteResponse(response: RouteResponse) -> String {
