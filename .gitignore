@@ -9,6 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
+ios/flutter_mapbox_navigation/.index-build
 
 # IntelliJ related
 *.iml
@@ -29,6 +30,7 @@ pubspec.lock
 .dart_tool/
 .packages
 build/
+ios/.index-build/
 
 example/android/app/src/main/res/values/mapbox_access_token.xml
 example/android/app/src/main/res/values/strings.xml

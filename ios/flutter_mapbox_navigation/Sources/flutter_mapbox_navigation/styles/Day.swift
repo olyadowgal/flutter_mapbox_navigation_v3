@@ -1,26 +1,24 @@
 import MapboxMaps
-import MapboxNavigation
-import MapboxMaps
+import MapboxNavigationCore
+import MapboxNavigationUIKit
 
-class CustomDayStyle: DayStyle {
+class CustomDayStyle: StandardDayStyle {
 
     required init() {
         super.init()
         initStyle()
     }
 
-    init(url: String?){
+    init(url: String?) {
         super.init()
         initStyle()
-        if(url != nil)
-        {
+        if(url != nil) {
             mapStyleURL = URL(string: url!) ?? URL(string: StyleURI.navigationDay.rawValue)!
             previewMapStyleURL = mapStyleURL
         }
     }
 
-    func initStyle()
-    {
+    func initStyle() {
         // Use a custom map style.
         mapStyleURL = URL(string: StyleURI.navigationDay.rawValue)!
         previewMapStyleURL = mapStyleURL
