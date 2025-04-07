@@ -8,7 +8,6 @@ import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.LifecycleOwner
-import com.eopeter.fluttermapboxnavigation.activity.NavigationLauncher
 import com.eopeter.fluttermapboxnavigation.databinding.NavigationActivityBinding
 import com.eopeter.fluttermapboxnavigation.models.MapBoxEvents
 import com.eopeter.fluttermapboxnavigation.models.MapBoxRouteProgressEvent
